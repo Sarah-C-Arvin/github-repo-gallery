@@ -3,6 +3,8 @@ const username = "Sarah-C-Arvin";
 const repoList = document.querySelector(".repo-list");
 const repoInfo = document.querySelector(".repos");
 const individualRepoData = document.querySelector(".repo-data");
+const backToGallery = document.querySelector(".view-repos");
+const searchBox = document.querySelector(".filter-repos");
 
 const gitHubInfo = async function(){
     const userInfo = await fetch(`https://api.github.com/users/${username}`);
@@ -36,6 +38,7 @@ const myRepos = async function(){
 };
 
 const displayRepoInfo = function(repos){
+    searchBox.classList.remove("hide");
     for (const repo of repos) {
       const repoItem = document.createElement("li");
       repoItem.classList.add("repo");
@@ -69,6 +72,7 @@ const getRepoInfo = async function(repoName){
 };
 
 const individualRepo = function(info, languages){
+  backToGallery.classList.remove("hide");
   individualRepoData.innerHTML = "";
   const div = document.createElement("div");
   individualRepoData.classList.remove("hide");
@@ -82,3 +86,25 @@ const individualRepo = function(info, languages){
   `;
   individualRepoData.append(div);
 };
+
+backToGallery.addEventListener("click", function(){
+  repoInfo.classList.remove("hide");
+  individualRepoData.classList.add("hide");
+  backToGallery.classList.add("hide");
+});
+
+searchBox.addEventListener("input", function(e){
+  const searchText = e.target.value;
+  //console.log(searchText);
+  const allRepos = document.querySelectorAll(".repo");
+  const lowercaseText = searchText.toLowerCase();
+
+  for (const repo of allRepos){
+    repoLowerText = repo.innerText.toLowerCase();
+    if (repoLowerText.includes(lowercaseText)){
+      repo.classList.remove("hide");
+    } else {
+      repo.classList.add("hide");
+    }
+  }
+});
